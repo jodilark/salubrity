@@ -12,29 +12,6 @@ How much experience do they have with technology?
 	intermediate level
 		standard web browsing, basic data entry.
 
-Possible methods of entry
-	voice command
-	scanning license
-	social media?
-
-//Lookup page
-Ability to see a list of all user/patient
-	searchable columns
-	filters on columns
-	
-Custom filters
-
-Do's on patients
-	add to run
-	see all runs
-
-Do's on users (only as admin)
-
-Sharable Do's
-	Edit information (simple)
-	
-	
-	
 when attaching to fitbit api just use https ... no need for cert.
 mvp feature set
 	user can login
@@ -65,6 +42,7 @@ ability to email
 ability to add attachements to email.
 ability to add a user by using a camera to decode their driver's license
 spreadsheet creation, export
+address api
 system guided tutorial
 testing
 	
@@ -89,7 +67,7 @@ testCreateCtrl
 		GET patient id's
 		GET tags
 		GET test type's
-		GET protocals
+		GET protocols
 		GET operators
 		GET instruments
 		POST JSON blob
@@ -100,7 +78,7 @@ testCreateCtrl
 			, "logNumber": "varchar"
 			, "tags": array "varchar"
 			, "testTypeId": int
-			, "protocalId": int
+			, "protocolId": int
 			, "operatorId": int
 			, "instrumentId": int
 		}
@@ -175,12 +153,260 @@ userCreateCtrl
 			]
 		}
 userManageCtrl
+	EP:
+		GET user by id
+		DELETE user by id
+		GET * users
 settingsCtrl
+	EP:
+		GET user by id
+		GET uom
+		PUT uom
 userStatsCtrl
+	EP:
+		GET user by id
+		GET stats by user id
 errorDir (directive)
+	EP:
+		GET error by id
 warningDir (directive)
+	EP:
+		GET warning by id
+		PUT feedback: boolean
+		POST feedback: boolean
 successDir (directive)
+	EP:
+		GET success by id
 headerDir (directive)
+	EP:
+		GET user by id
 contactCtrl
 globalSearchCtrl
+	EP:
+		GET user by id
+		GET * users
+		GET * tests
 progressBarDir (directive)
+
+SCHEMA
+User table
+	CREATE TABLE user
+	(
+		id serial primary key
+		, first_name varchar
+		, last_name varchar
+		, dob date
+		, email varchar
+		, phone int
+		, address1 varchar 
+		, address2 varchar
+		, city varchar
+		, state_id int
+		, country_id int
+		, zip_id varchar
+		, weight int
+		, height int
+		, fitbit_id varchar
+		, role_id varchar
+		, family_id int
+		, hide_from_public boolean
+		, condition_date_id int
+		, user_stats_id
+	)
+Test results table
+	CREATE TABLE test_results
+	(
+		id serial primary key
+		, test_type_id int
+		, serial_number varchar
+		, sample_id int
+		, patient_id int
+		, lot_number varchar
+		, tags_id array int
+		, protocol_id int
+		, operator_id int
+		, instrument_id int
+	)
+
+Sample table
+	CREATE TABLE sample
+	(
+		id serial primary key
+		, sample_name
+		, sample_description
+	)
+
+Instrument table
+	CREATE TABLE instrument
+	(
+		id serial primary key
+		, instrument_name
+		, instrument_description
+	)
+Country table
+	CREATE TABLE country
+	(
+		id serial primary key
+		, country_name
+	)
+State table
+	CREATE TABLE state
+	(
+		id serial primary key
+		, long_name varchar
+		, short_name varchar
+	)
+
+Notification message table
+	CREATE TABLE notification_message
+	(
+		id serial primary key
+		, notification_type varchar
+		, needs_feedback boolean
+		, message varchar
+		, timeout int
+		, notification_botton_layout_id int
+	)
+
+Notification button layout table
+	CREATE TABLE notification_button_layout
+	(
+		id serial primary key
+		, set_type varchar
+		, description varchar
+	)
+	INSERT INTO notification_button_layout
+	(set_type, description)
+	VALUES 
+	(
+		"confirmation"
+		, "a proceed button typically refered to as proceed, save or continue. a cancel button that will return the user to previous state."
+	),
+	(
+		"user input needed"
+		, "a proceed button typically refered to as proceed, save or continue. a cancel button that will return the user to previous state. an ignore but ignore button."
+	),
+	(
+		"no input needed"
+		, "no buttons"
+	)
+
+
+Roles table
+	CREATE TABLE roles
+	(
+		id serial primary key
+		, public
+		, patient
+		, operator
+		, admin
+	)
+
+Family table
+	CREATE TABLE family
+	(
+		id serial primary key
+		, father_first_name varchar
+		, father_last_name varchar
+		, father_dob date
+		, mother_first_name varchar
+		, mother_last_name varchar
+		, mother_maiden_name varchar
+		, mother_dob date
+		, siblings [{
+				gender varchar
+				, first_name varchar
+				, last_name varchar
+				, dob date
+			}
+		]
+		, children [{
+				gender varchar
+				, first_name varchar
+				, last_name varchar
+				, dob date
+			}
+		]
+	)
+
+Medical history table
+	CREATE TABLE medical_history
+	(
+		id serial primary key
+		, condition varchar
+	)
+
+Condition date table
+	CREATE TABLE condition_date
+	(
+		id serial primary key
+		, medical_condition_id int
+		, user_id int
+		, condition_date date
+	)
+
+Stats table
+	CREATE TABLE user_stats
+	(
+		id serial primary key
+		, user_id int
+		, avg_active_time time
+		, avg_bp varchar
+		, avg_hr varchar
+		, current_weight
+		, avg_sleep
+	)
+
+
+test type
+	CREATE TABLE test_type
+	(
+		id serial primary key
+		, name varchar
+		, description varchar
+	)
+
+protocol
+	CREATE TABLE protocol
+	(
+		id serial primary key
+		, protocol_type varchar
+	)
+
+tags
+	CREATE TABLE tags
+	(
+		id serial primary key
+		, tag_name
+	)
+
+testDefaultColumn table
+	CREATE TABLE test_default_columns
+	(
+		id serial primary key
+		, column1 varchar
+		, column2 varchar
+		, column3 varchar
+		, column4 varchar
+		, column5 varchar
+		, column6 varchar
+		, column7 varchar
+		, column8 varchar
+	)
+
+
+userDefaultColumn table
+	CREATE TABLE user_default_columns
+	(
+		id serial primary key
+		, column1 varchar
+		, column2 varchar
+		, column3 varchar
+		, column4 varchar
+		, column5 varchar
+		, column6 varchar
+		, column7 varchar
+		, column8 varchar
+	)
+
+
