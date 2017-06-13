@@ -1,195 +1,3 @@
-What problem does this app solve?
-	People are always asked about their medical history when visiting healthcare facilities. It would be nice to not only have that information on hand as a client, but to be able to receive that information as the healthcare provider through an easy to read method.
-	
-How does it solve those problems?
-	allows a person to have quick access to medical records and the ability for providers to perform/track new medical tests
-	
-Who is your target user?
-	healthcare providers
-	general public
-	
-How much experience do they have with technology?
-	intermediate level
-		standard web browsing, basic data entry.
-
-when attaching to fitbit api just use https ... no need for cert.
-mvp feature set
-	user can login
-	user can logout
-	if the user leaves the page, or refreshes, session is maintained
-	if user is not logged in, they cannot see any personalized information and is restricted to the landing page.
-	the landing page explains what the app is about and how to use it
-	admin can perform crud operations on users
-	admin can perform crud operations on tests
-	users can search through a list of users (including admin users) as long as they have permission to do so
-	user can search every piece of data using a global search
-	users can sort the user table by one or more column headers
-	users can filter the user table by one or more column headers
-	users can add keywords to each record
-	user can access the app and have a good user experience on mobile, tablet, and desktop
-	users can be flagged as admins
-	users can select a user from the table to see more detailed information about that user
-	needs to be user messageing when the user performs crud actions
-	basic styling
-	
-add ons
-fit bit tracking and reporting from user's fitbit device
-d3 graphs on the landing page (once logged in) that will give stats about users and tests
-barcode scanner to add test supplies used for test
-animations
-parrellax effects
-filterable droplists
-ability to email
-ability to add attachements to email.
-ability to add a user by using a camera to decode their driver's license
-spreadsheet creation, export
-address api
-system guided tutorial
-testing
-	
-Controllers
-loginCtrl
-	EP:
-		POST authkey
-landingPagePublicCtrl
-	noDB
-landingPageUserCtrl
-	EP:
-		GET global search
-		GET user stats by id
-landingPageHCPCtrl
-	EP:
-		GET test stats *
-		GET test by user id
-		GET test by test id
-testCreateCtrl
-	EP:
-		GET test by id
-		GET patient id's
-		GET tags
-		GET test type's
-		GET protocols
-		GET operators
-		GET instruments
-		POST JSON blob
-		{
-			"serialNumber": "varchar"
-			, "sampleId": int
-			, "patientId": int
-			, "logNumber": "varchar"
-			, "tags": array "varchar"
-			, "testTypeId": int
-			, "protocolId": int
-			, "operatorId": int
-			, "instrumentId": int
-		}
-testManageCtrl
-	EP:
-		GET * tests
-		GET test by id
-		DELETE test by id
-		PUT JSON blob
-		{
-			"tags": array "varchar" 
-		}
-		GET default column list by user
-		GET user by id
-		GET default column list
-testDetailsCtrl
-	EP:
-		GET test by id
-userCreateCtrl
-	EP:
-		GET roles
-		GET user by id
-		GET medical history list
-		GET country list
-		GET state list
-		GET zipcode list
-		POST JSON blob
-		{
-			"firstName": "varchar"
-			, "lastName": "varchar"
-			, "dob": date
-			, "email": "varchar"
-			, "phone": int
-			, "address1": "varchar"
-			, "address2": "varchar"
-			, "city": "varchar"
-			, "state": selection "varchar"
-			, "country": selection "varchar"
-			, "zip": selection int
-			, "weight": int
-			, "height": int
-			, "fitbitId: "varchar"
-			, "role": selection "varchar"
-			, "familyRelations": {
-				"fatherFirstName": "varchar"
-				, "fatherLastName": "varchar"
-				, "fatherDob": date
-				, "motherFirstName": "varchar"
-				, "motherMaidenName": "varchar"
-				, "motherDob": date
-				, "siblings": [{
-						"gender": selection "varchar"
-						, "firstName": "varchar"
-						, "lastName": "varchar"
-						, "dob": date
-					}
-				]
-				, "children": [{
-						"gender": selection "varchar"
-						, "firstName": "varchar"
-						, "lastName": "varchar"
-						, "dob": date
-					}
-				]
-			}
-			, "hideFromPublic": boolean (default to false)
-			, "medicalHistory": [{
-					"condition": "varchar"
-					, "hasHistory": boolean (default to false)
-					, "lastRecord": date
-				}
-			]
-		}
-userManageCtrl
-	EP:
-		GET user by id
-		DELETE user by id
-		GET * users
-settingsCtrl
-	EP:
-		GET user by id
-		GET uom
-		PUT uom
-userStatsCtrl
-	EP:
-		GET user by id
-		GET stats by user id
-errorDir (directive)
-	EP:
-		GET error by id
-warningDir (directive)
-	EP:
-		GET warning by id
-		PUT feedback: boolean
-		POST feedback: boolean
-successDir (directive)
-	EP:
-		GET success by id
-headerDir (directive)
-	EP:
-		GET user by id
-contactCtrl
-globalSearchCtrl
-	EP:
-		GET user by id
-		GET * users
-		GET * tests
-progressBarDir (directive)
-
--- SCHEMA DELETE
 DROP TABLE IF EXISTS children CASCADE;
 DROP TABLE IF EXISTS condition_date CASCADE;
 DROP TABLE IF EXISTS country CASCADE;
@@ -274,12 +82,70 @@ DROP TABLE IF EXISTS user_stats CASCADE;
 		, country_name varchar
 	);
 -- State table
-	CREATE TABLE IF NOT EXISTS state
-	(
-		id serial primary key
-		, long_name varchar
-		, short_name varchar
-	);
+CREATE TABLE IF NOT EXISTS state (
+  id serial primary key,
+  code char(2) not null,
+  name varchar(64) not null
+);
+INSERT INTO state (code,name) VALUES ('AL','Alabama');
+INSERT INTO state (code,name) VALUES ('AK','Alaska');
+INSERT INTO state (code,name) VALUES ('AS','American Samoa');
+INSERT INTO state (code,name) VALUES ('AZ','Arizona');
+INSERT INTO state (code,name) VALUES ('AR','Arkansas');
+INSERT INTO state (code,name) VALUES ('CA','California');
+INSERT INTO state (code,name) VALUES ('CO','Colorado');
+INSERT INTO state (code,name) VALUES ('CT','Connecticut');
+INSERT INTO state (code,name) VALUES ('DE','Delaware');
+INSERT INTO state (code,name) VALUES ('DC','District of Columbia');
+INSERT INTO state (code,name) VALUES ('FM','Federated States of Micronesia');
+INSERT INTO state (code,name) VALUES ('FL','Florida');
+INSERT INTO state (code,name) VALUES ('GA','Georgia');
+INSERT INTO state (code,name) VALUES ('GU','Guam');
+INSERT INTO state (code,name) VALUES ('HI','Hawaii');
+INSERT INTO state (code,name) VALUES ('ID','Idaho');
+INSERT INTO state (code,name) VALUES ('IL','Illinois');
+INSERT INTO state (code,name) VALUES ('IN','Indiana');
+INSERT INTO state (code,name) VALUES ('IA','Iowa');
+INSERT INTO state (code,name) VALUES ('KS','Kansas');
+INSERT INTO state (code,name) VALUES ('KY','Kentucky');
+INSERT INTO state (code,name) VALUES ('LA','Louisiana');
+INSERT INTO state (code,name) VALUES ('ME','Maine');
+INSERT INTO state (code,name) VALUES ('MH','Marshall Islands');
+INSERT INTO state (code,name) VALUES ('MD','Maryland');
+INSERT INTO state (code,name) VALUES ('MA','Massachusetts');
+INSERT INTO state (code,name) VALUES ('MI','Michigan');
+INSERT INTO state (code,name) VALUES ('MN','Minnesota');
+INSERT INTO state (code,name) VALUES ('MS','Mississippi');
+INSERT INTO state (code,name) VALUES ('MO','Missouri');
+INSERT INTO state (code,name) VALUES ('MT','Montana');
+INSERT INTO state (code,name) VALUES ('NE','Nebraska');
+INSERT INTO state (code,name) VALUES ('NV','Nevada');
+INSERT INTO state (code,name) VALUES ('NH','New Hampshire');
+INSERT INTO state (code,name) VALUES ('NJ','New Jersey');
+INSERT INTO state (code,name) VALUES ('NM','New Mexico');
+INSERT INTO state (code,name) VALUES ('NY','New York');
+INSERT INTO state (code,name) VALUES ('NC','North Carolina');
+INSERT INTO state (code,name) VALUES ('ND','North Dakota');
+INSERT INTO state (code,name) VALUES ('MP','Northern Mariana Islands');
+INSERT INTO state (code,name) VALUES ('OH','Ohio');
+INSERT INTO state (code,name) VALUES ('OK','Oklahoma');
+INSERT INTO state (code,name) VALUES ('OR','Oregon');
+INSERT INTO state (code,name) VALUES ('PW','Palau');
+INSERT INTO state (code,name) VALUES ('PA','Pennsylvania');
+INSERT INTO state (code,name) VALUES ('PR','Puerto Rico');
+INSERT INTO state (code,name) VALUES ('RI','Rhode Island');
+INSERT INTO state (code,name) VALUES ('SC','South Carolina');
+INSERT INTO state (code,name) VALUES ('SD','South Dakota');
+INSERT INTO state (code,name) VALUES ('TN','Tennessee');
+INSERT INTO state (code,name) VALUES ('TX','Texas');
+INSERT INTO state (code,name) VALUES ('UT','Utah');
+INSERT INTO state (code,name) VALUES ('VT','Vermont');
+INSERT INTO state (code,name) VALUES ('VI','Virgin Islands');
+INSERT INTO state (code,name) VALUES ('VA','Virginia');
+INSERT INTO state (code,name) VALUES ('WA','Washington');
+INSERT INTO state (code,name) VALUES ('WV','West Virginia');
+INSERT INTO state (code,name) VALUES ('WI','Wisconsin');
+INSERT INTO state (code,name) VALUES ('WY','Wyoming');
 
 -- Notification message table
 	CREATE TABLE IF NOT EXISTS notification_message
@@ -439,6 +305,4 @@ DROP TABLE IF EXISTS user_stats CASCADE;
 		, column7 varchar
 		, column8 varchar
 	);
-
-
 

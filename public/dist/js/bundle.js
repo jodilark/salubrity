@@ -25,7 +25,8 @@ angular.module('app', ['ui.router']).config(function ($stateProvider, $urlRouter
         url: '/test_manage'
     }).state('user_create', {
         templateUrl: '../views/user_create.html',
-        url: '/user_create'
+        url: '/user_create',
+        controller: 'userCreate'
     }).state('user_manage', {
         templateUrl: '../views/user_manage.html',
         url: '/user_manage'
@@ -46,6 +47,31 @@ angular.module('app').controller('mainCtrl', function ($scope) {
 "use strict";
 "use strict";
 "use strict";
+'use strict';
+
+angular.module('app').controller('userCreate', function ($scope, stateListSrv, postUserInfoSrv) {
+    // =============== TESTS
+    $scope.userCreateTest = 'userCreate controller is working correctly';
+    $scope.serviceTest = stateListSrv.serviceTest;
+
+    // =============== GET STATES LIST
+    $scope.states = function () {
+        stateListSrv.getStatesList().then(function (response) {
+            $scope.stateName = response.data;
+        });
+    };
+    $scope.states
+
+    // =============== SUBMIT FORM DATA
+    ();$scope.userInfo = {};
+    $scope.submit = function () {
+        var name = $scope.stateObj.name;
+        $scope.userInfo.state = name;
+        postUserInfoSrv.submitUserInfo($scope.userInfo);
+    };
+
+    // no code below this line
+});
 "use strict";
 "use strict";
 "use strict";
@@ -54,5 +80,26 @@ angular.module('app').controller('mainCtrl', function ($scope) {
 "use strict";
 "use strict";
 "use strict";
-"use strict";
+'use strict';
+
+angular.module('app').service('postUserInfoSrv', function ($http) {
+    // =============== TESTS
+    this.serviceTest = 'the postUserInfoSrv is connected';
+
+    // =============== ENDPOINTS
+    this.submitUserInfo = function (data) {
+        console.log('clicked submit and got ' + JSON.stringify(data));
+    };
+});
+'use strict';
+
+angular.module('app').service('stateListSrv', function ($http) {
+    // =============== TESTS
+    this.serviceTest = 'the stateListSrv is connected';
+
+    // =============== ENDPOINTS
+    this.getStatesList = function () {
+        return $http.get('http://localhost:3000/api/states');
+    };
+});
 //# sourceMappingURL=bundle.js.map

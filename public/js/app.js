@@ -33,6 +33,7 @@ angular.module('app', ['ui.router'])
             .state('user_create', {
                 templateUrl: '../views/user_create.html',
                 url: '/user_create',
+                controller: 'userCreate'
             })
             .state('user_manage', {
                 templateUrl: '../views/user_manage.html',

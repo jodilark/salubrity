@@ -1,1 +1,14 @@
 <h1>Create a User</h1>
+<!--=============== TESTS-->
+<div class="test-results">
+    <ul>
+        <li>1. {{userCreateTest}}</li>
+        <li>2. {{serviceTest}}</li>
+    </ul>
+</div>
+
+<form>
+    <input type="text" placeholder="First Name" ng-model="userInfo.firstName" />
+    <select placeholder="Select State" ng-options="state as state.name for state in stateName" ng-model="stateObj" />
+    <input type="submit" value="Submit" ng-click="submit()" />
+</form>

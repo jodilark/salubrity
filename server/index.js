@@ -10,6 +10,7 @@ const config = require('./.config')
 
 //  =================   REQUIRE FILES
 const productsCtrl = require('./controllers/productsCtrl')
+const userCtrl = require('./controllers/userCtrl')
 
 //  =================   OTHER VARIABLES
 const port = 3000
@@ -19,18 +20,20 @@ const app = express()
 app.use(express.static('../public'))
 // app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.json())
-// massive({
-//   host: 'localhost',
-//   port: 5432,
-//   database: //enter db
-//   , user: 'postgres',
-//   password: //enter password
-// }).then(function (db) {
-//   app.set('db', db),
-//     console.log('connected to db')
-// });
 
-// ...session setups
+// ............... database
+massive({
+  host: 'localhost'
+  , port: 5432
+  , database: 'salubrity'
+  , user: config.user
+  , password: config.password
+}).then(function (db) {
+  app.set('db', db),
+    console.log('connected to salubrity database')
+});
+
+// ............... session setups
 app.use(session({
   resave: true, //Without this you get a constant warning about default values
   saveUninitialized: true, //Without this you get a constant warning about default values
@@ -67,6 +70,7 @@ passport.deserializeUser(function(obj, done) {
 
 //  ================= ENDPOINTS
 app.get('/api/products', productsCtrl.getTestProducts)
+app.get('/api/states', userCtrl.getStatesList)
 
 // ...authorization endpoints
 app.get('/auth', passport.authenticate('auth0'));

@@ -1,0 +1,8 @@
+// =============== IMPORT FILES
+@import '_varsAndMixins';
+
+// =============== PAGE STYLES
+// ............... all pages
+.test-results {
+    @include test-format;
+}
