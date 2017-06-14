@@ -6,3 +6,7 @@
 .test-results {
     @include test-format;
 }
+div.test-results {
+    border: 1px dashed red;
+    background: rgba(0, 0, 0, .1);
+}

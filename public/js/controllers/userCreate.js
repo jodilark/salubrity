@@ -1,7 +1,11 @@
 angular.module('app').controller('userCreate', function ($scope, stateListSrv, postUserInfoSrv) {
     // =============== TESTS
     $scope.userCreateTest = 'userCreate controller is working correctly'
-    $scope.serviceTest = stateListSrv.serviceTest
+    $scope.stateListSrvTest = stateListSrv.serviceTest
+    $scope.postUserInfoSrvTest = postUserInfoSrv.serviceTest
+
+    // =============== VARIABLES
+
 
     // =============== GET STATES LIST
     $scope.states = function () {
@@ -14,8 +18,13 @@ angular.module('app').controller('userCreate', function ($scope, stateListSrv, p
     // =============== SUBMIT FORM DATA
     $scope.userInfo = {}
     $scope.submit = () => {
-        var name = $scope.stateObj.name
-        $scope.userInfo.state = name
+        var sName = $scope.stateObj.name
+        for (let i = 0; i < $scope.stateName.length; i++) {
+            if ($scope.stateName[i].name === sName) {
+                $scope.userInfo.state_id = $scope.stateName[i].id
+            }
+        }
+        console.log(`userInfo object that will be sent is ${JSON.stringify($scope.userInfo)}`)
         postUserInfoSrv.submitUserInfo($scope.userInfo)
     }
 

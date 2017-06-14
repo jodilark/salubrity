@@ -88,4 +88,8 @@ input, select {
   font-size: 20px;
   font-style: italic; }
 
+div.test-results {
+  border: 1px dashed red;
+  background: rgba(0, 0, 0, 0.1); }
+
 /*# sourceMappingURL=maps/styles.css.map */

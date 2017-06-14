@@ -1,1 +1,1 @@
-SELECT name FROM state;
+SELECT id, name FROM state;

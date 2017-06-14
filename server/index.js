@@ -69,8 +69,10 @@ passport.deserializeUser(function(obj, done) {
 });
 
 //  ================= ENDPOINTS
-app.get('/api/products', productsCtrl.getTestProducts)
+// app.get('/api/products', productsCtrl.getTestProducts)
 app.get('/api/states', userCtrl.getStatesList)
+app.post('/api/user', userCtrl.createNewUser)
+app.get('/api/user', userCtrl.getAllUsers)
 
 // ...authorization endpoints
 app.get('/auth', passport.authenticate('auth0'));
