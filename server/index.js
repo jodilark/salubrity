@@ -73,6 +73,7 @@ passport.deserializeUser(function(obj, done) {
 app.get('/api/states', userCtrl.getStatesList)
 app.post('/api/user', userCtrl.createNewUser)
 app.get('/api/user', userCtrl.getAllUsers)
+app.delete('/api/user', userCtrl.deleteAllUsers)
 
 // ...authorization endpoints
 app.get('/auth', passport.authenticate('auth0'));

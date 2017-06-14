@@ -15,7 +15,7 @@ exports.createNewUser = function (req, res) {
         , req.body.state_id
     ]
     req.app.get('db').createUser(userBody).then(function (response) {
-        res.send(`User Created!`)
+        res.status(200).send(`User has been created successfully`)
     })
 }
 // ...............  gets a list of all users
@@ -23,4 +23,10 @@ exports.getAllUsers = function (req, res) {
     req.app.get('db').getAllUsers().then(function (resp) {
         res.send(resp)
     })
+}
+// deletes all users
+exports.deleteAllUsers = function (req, res){
+    req.app.get('db').deleteAllTheUsers().then(function (resp) {
+        res.send(`all users have been deleted ${resp}`)
+    })    
 }
