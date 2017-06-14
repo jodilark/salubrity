@@ -68,17 +68,13 @@ angular.module('app').controller('userCreate', function ($scope, stateListSrv, p
     };
     $scope.states
 
-    // =============== GET User LIST
-    // $scope.users = function () {
-    //     userListSrv.getUserList().then((response) => {
-    //         $scope.users = response.data
-    //         console.log(JSON.stringify($scope.users))
-    //     })
-    // }
-    // $scope.users()
+    // =============== CLEAR FORM
+    ();$scope.clearForm = function () {
+        return document.getElementById("userCreateForm").reset
 
-    // =============== SUBMIT USER FORM DATA
-    ();$scope.userInfo = {};
+        // =============== SUBMIT USER FORM DATA
+        ();
+    };$scope.userInfo = {};
     $scope.submit = function () {
         var sName = $scope.stateObj.name;
         var exists = 0;
@@ -105,6 +101,7 @@ angular.module('app').controller('userCreate', function ($scope, stateListSrv, p
                     // console.log(`userInfo object that will be sent is ${JSON.stringify($scope.userInfo)}`)
                     postUserInfoSrv.submitUserInfo($scope.userInfo);
                     alert('User has been created.');
+                    $scope.clearForm();
                 } else {
                     alert('User already exists!');
                 }
@@ -113,7 +110,7 @@ angular.module('app').controller('userCreate', function ($scope, stateListSrv, p
         getUsers();
     };
 
-    // =============== Delete all users
+    // =============== DELETE ALL USERS
     $scope.deleteUsers = function () {
         return deleteAllUsersSrv.deleteAllUsers();
     };

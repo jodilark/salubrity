@@ -11,7 +11,7 @@
     <button ng-click="deleteUsers()" style="background: red; color: white; cursor: pointer">Delete All Users</button>
 </div>
 
-<form>
+<form id="userCreateForm">
     <input type="text" placeholder="First Name" ng-model="userInfo.firstName" />
     <input type="text" placeholder="Last Name" ng-model="userInfo.lastName" />
     <input type="email" placeholder="email" ng-model="userInfo.email" />
@@ -19,3 +19,4 @@
     <option value="" disabled selected>State</option>
     <input type="submit" value="Submit" ng-click="submit()" />
 </form>
+<button ng-click="clearForm()">Clear</button>
