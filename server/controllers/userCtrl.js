@@ -13,6 +13,7 @@ exports.createNewUser = function (req, res) {
         , req.body.lastName
         , req.body.email
         , req.body.state_id
+        , req.body.dob
     ]
     req.app.get('db').createUser(userBody).then(function (response) {
         res.status(200).send(`User has been created successfully`)
@@ -24,9 +25,19 @@ exports.getAllUsers = function (req, res) {
         res.send(resp)
     })
 }
-// deletes all users
+// ...............  gets a list of columns on the user table
+exports.getUserColumns = function (req, res) {
+    req.app.get('db').getUserColumnList().then(function (resp) {
+        res.send(resp)
+    })
+}
+// ...............  deletes all users
 exports.deleteAllUsers = function (req, res){
     req.app.get('db').deleteAllTheUsers().then(function (resp) {
         res.send(`all users have been deleted ${resp}`)
     })    
+}
+// ...............  gets data for the manage user table
+exports.getMUData = (req, res) => {
+    req.app.get('db').popManageUserTable().then((resp) => res.send(resp))       
 }

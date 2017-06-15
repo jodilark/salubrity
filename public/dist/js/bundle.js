@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app', ['ui.router']).config(function ($stateProvider, $urlRouterProvider) {
+angular.module('app', ['ui.router', 'ui.grid']).config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/', "");
     $stateProvider.state('home', {
         templateUrl: '../views/home.html',
@@ -29,7 +29,8 @@ angular.module('app', ['ui.router']).config(function ($stateProvider, $urlRouter
         controller: 'userCreate'
     }).state('user_manage', {
         templateUrl: '../views/user_manage.html',
-        url: '/user_manage'
+        url: '/user_manage',
+        controller: 'userManage'
     });
 });
 "use strict";
@@ -49,13 +50,14 @@ angular.module('app').controller('mainCtrl', function ($scope) {
 "use strict";
 'use strict';
 
-angular.module('app').controller('userCreate', function ($scope, stateListSrv, postUserInfoSrv, userListSrv, deleteAllUsersSrv) {
+angular.module('app').controller('userCreate', function ($scope, stateListSrv, postUserInfoSrv, userListSrv, deleteAllUsersSrv, dobSrv) {
     // =============== TESTS
     $scope.userCreateTest = 'userCreate controller is working correctly';
     $scope.stateListSrvTest = stateListSrv.serviceTest;
     $scope.postUserInfoSrvTest = postUserInfoSrv.serviceTest;
     $scope.userServiceTest = userListSrv.userServiceTest;
     $scope.deleteAllUsersServiceTest = deleteAllUsersSrv.deleteAllUsersServiceTest;
+    $scope.dobServiceTest = dobSrv.dobServiceTest;
 
     // =============== VARIABLES
 
@@ -68,6 +70,14 @@ angular.module('app').controller('userCreate', function ($scope, stateListSrv, p
     };
     $scope.states
 
+    // // =============== GET MONTHS LIST
+    // $scope.getmonths = () => {
+    //     $scope.months = dobSrv.monthsArr()
+    //     // console.log(JSON.stringify($scope.months))
+    // }
+    // $scope.getmonths()
+    // $scope.selectedMonth = null
+
     // =============== CLEAR FORM
     ();$scope.clearForm = function () {
         return document.getElementById("userCreateForm").reset
@@ -79,6 +89,7 @@ angular.module('app').controller('userCreate', function ($scope, stateListSrv, p
         var sName = $scope.stateObj.name;
         var exists = 0;
         // console.log(`exists before function ${exists}`)
+        // ...................... checks to verify that the user doesn't already exist in the database.
         var getUsers = function getUsers() {
             userListSrv.getUserList().then(function (response) {
                 $scope.users = response.data;
@@ -117,7 +128,28 @@ angular.module('app').controller('userCreate', function ($scope, stateListSrv, p
 
     // no code below this line
 });
-"use strict";
+'use strict';
+
+angular.module('app').controller('userManage', function ($scope, uiGridConstants, userListSrv, getUserColumnsSrv) {
+    // ===============  TESTS
+    $scope.userManageControllerTest = 'userManage Controller is ready to role!';
+    $scope.getUserColumnsSrvServiceTest = getUserColumnsSrv.getUserColumnsSrvServiceTest;
+
+    // ===============  COLUMNS AND DATA
+    $scope.gridOptions = {
+        enableFiltering: true,
+        columnDefs: [],
+        onRegisterApi: function onRegisterApi(gridApi) {
+            $scope.grid1Api = gridApi;
+        }
+    };
+    $scope.getUsers = function () {
+        userListSrv.getCustomUserList().then(function (response) {
+            $scope.gridOptions.data = response.data;
+        });
+    };
+    $scope.getUsers();
+});
 "use strict";
 "use strict";
 "use strict";
@@ -139,6 +171,70 @@ angular.module('app').service('deleteAllUsersSrv', function ($http) {
         }).then(function (httpResponse) {
             console.log('response:', JSON.stringify(httpResponse));
         });
+    };
+});
+'use strict';
+
+angular.module('app').service('dobSrv', function ($http) {
+    // =============== TESTS
+    this.dobServiceTest = 'the dobSrv is connected';
+
+    // =============== LISTS
+    // ............... months
+    this.monthsArr = function () {
+        var monthObj = [{ name: 'January' }, { name: 'February' }, { name: 'March' }, { name: 'April' }, { name: 'May' }, { name: 'June' }, { name: 'July' }, { name: 'August' }, { name: 'September' }, { name: 'October' }, { name: 'November' }, { name: 'December' }];
+        return monthObj;
+    };
+    // ............... days in the month
+
+    this.setDayOptions = function (month, year) {
+        var dayOptions = [1, 2, 3];
+        var leapYears = [1904, 1908, 1912, 1916, 1920, 1924, 1928, 1932, 1936, 1940, 1944, 1948, 1952, 1956, 1960, 1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020];
+        if (month === 'April' || month === 'June' || month === 'September' || month === 'November') {
+            for (var i = 1; i < 31; i++) {
+                dayOptions.push(i);
+            }
+            return dayOptions;
+        } else if (month === 'February' && leapYears.indexOf(year) !== -1) {
+            for (var _i = 1; _i < 30; _i++) {
+                dayOptions.push(_i);
+            }
+            return dayOptions;
+        } else if (month === 'February' && leapYears.indexOf(year) === -1) {
+            for (var _i2 = 1; _i2 < 29; _i2++) {
+                dayOptions.push(_i2);
+            }
+            return dayOptions;
+        } else {
+            for (var _i3 = 1; _i3 < 32; _i3++) {
+                dayOptions.push(_i3);
+            }
+            return dayOptions;
+        }
+    };
+    // ............... years available
+    this.yearsArr = [1980, 1981, 1982];
+    this.makeYearArray = function (numberOfYears) {
+        var d = new Date();
+        var n = d.getFullYear();
+        var p = n - numberOfYears;
+        for (var i = p; i <= n; i++) {
+            yearsArr.push(i);
+        }
+        return yearsArr;
+    };
+
+    // no code below this line
+});
+'use strict';
+
+angular.module('app').service('getUserColumnsSrv', function ($http) {
+    // =============== TESTS
+    this.getUserColumnsSrvServiceTest = 'the getUserColumnsSrv is connected';
+
+    // =============== ENDPOINTS
+    this.getColumnList = function () {
+        return $http.get('http://localhost:3000/api/user/columns');
     };
 });
 'use strict';
@@ -179,6 +275,9 @@ angular.module('app').service('userListSrv', function ($http) {
     // =============== ENDPOINTS
     this.getUserList = function () {
         return $http.get('http://localhost:3000/api/user');
+    };
+    this.getCustomUserList = function () {
+        return $http.get('http://localhost:3000/api/users');
     };
 });
 //# sourceMappingURL=bundle.js.map

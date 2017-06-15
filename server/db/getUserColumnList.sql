@@ -1,0 +1,3 @@
+SELECT column_name
+FROM salubrity.INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = N'users';

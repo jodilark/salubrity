@@ -1,10 +1,11 @@
-angular.module('app').controller('userCreate', function ($scope, stateListSrv, postUserInfoSrv, userListSrv, deleteAllUsersSrv) {
+angular.module('app').controller('userCreate', function ($scope, stateListSrv, postUserInfoSrv, userListSrv, deleteAllUsersSrv, dobSrv) {
     // =============== TESTS
     $scope.userCreateTest = 'userCreate controller is working correctly'
     $scope.stateListSrvTest = stateListSrv.serviceTest
     $scope.postUserInfoSrvTest = postUserInfoSrv.serviceTest
     $scope.userServiceTest = userListSrv.userServiceTest
     $scope.deleteAllUsersServiceTest = deleteAllUsersSrv.deleteAllUsersServiceTest
+    $scope.dobServiceTest = dobSrv.dobServiceTest
 
     // =============== VARIABLES
 
@@ -17,6 +18,14 @@ angular.module('app').controller('userCreate', function ($scope, stateListSrv, p
     }
     $scope.states()
 
+    // // =============== GET MONTHS LIST
+    // $scope.getmonths = () => {
+    //     $scope.months = dobSrv.monthsArr()
+    //     // console.log(JSON.stringify($scope.months))
+    // }
+    // $scope.getmonths()
+    // $scope.selectedMonth = null
+
     // =============== CLEAR FORM
     $scope.clearForm = () => document.getElementById("userCreateForm").reset()
 
@@ -26,6 +35,7 @@ angular.module('app').controller('userCreate', function ($scope, stateListSrv, p
         var sName = $scope.stateObj.name
         var exists = 0
         // console.log(`exists before function ${exists}`)
+        // ...................... checks to verify that the user doesn't already exist in the database.
         var getUsers = () => {
             userListSrv.getUserList().then((response) => {
                 $scope.users = response.data

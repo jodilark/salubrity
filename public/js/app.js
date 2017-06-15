@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router'])
+angular.module('app', ['ui.router', 'ui.grid'])
     .config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/', "")
         $stateProvider
@@ -38,6 +38,7 @@ angular.module('app', ['ui.router'])
             .state('user_manage', {
                 templateUrl: '../views/user_manage.html',
                 url: '/user_manage',
+                controller: 'userManage'
             })
 
     })

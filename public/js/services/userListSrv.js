@@ -4,4 +4,5 @@ angular.module('app').service('userListSrv', function($http){
 
     // =============== ENDPOINTS
     this.getUserList = () => ( $http.get('http://localhost:3000/api/user') )
+    this.getCustomUserList = () => ( $http.get('http://localhost:3000/api/users') )
 })

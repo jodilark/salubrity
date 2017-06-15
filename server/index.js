@@ -74,6 +74,8 @@ app.get('/api/states', userCtrl.getStatesList)
 app.post('/api/user', userCtrl.createNewUser)
 app.get('/api/user', userCtrl.getAllUsers)
 app.delete('/api/user', userCtrl.deleteAllUsers)
+app.get('/api/user/columns', userCtrl.getUserColumns)
+app.get('/api/users/', userCtrl.getMUData)
 
 // ...authorization endpoints
 app.get('/auth', passport.authenticate('auth0'));
