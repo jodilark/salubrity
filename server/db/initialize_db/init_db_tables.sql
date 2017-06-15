@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS children CASCADE;
 DROP TABLE IF EXISTS condition_date CASCADE;
 DROP TABLE IF EXISTS country CASCADE;
 DROP TABLE IF EXISTS family CASCADE;
+DROP TABLE IF EXISTS fitBitObj CASCADE;
 DROP TABLE IF EXISTS instrument CASCADE;
 DROP TABLE IF EXISTS medical_history CASCADE;
 DROP TABLE IF EXISTS notification_button_layout CASCADE;
@@ -306,3 +307,9 @@ INSERT INTO state (code,name) VALUES ('WY','Wyoming');
 		, column8 varchar
 	);
 
+-- fitbit table
+	CREATE TABLE IF NOT EXISTS fitBitObj
+	(
+		id serial primary key
+		, user_id varchar
+	)

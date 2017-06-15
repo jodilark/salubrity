@@ -40,5 +40,4 @@ angular.module('app', ['ui.router', 'ui.grid'])
                 url: '/user_manage',
                 controller: 'userManage'
             })
-
     })
